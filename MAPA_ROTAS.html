@@ -168,13 +168,20 @@ function normalizarBuscaSite(valor){
 function registrarSiteBusca(site, marker, lat, lon, listaCamada){
   var chave = normalizarBuscaSite(site);
   if(!chave) return;
-  indiceSites[chave] = {
+  var item = {
     site: site,
     marker: marker,
     lat: lat,
     lon: lon,
     listaCamada: listaCamada || null
   };
+  indiceSites[chave] = item;
+
+  // Permite buscar tambem apenas pelas tres letras finais do site.
+  // Ex.: MG-NSB, MGNSB ou NSB.
+  if(chave.length >= 3){
+    indiceSites[chave.slice(-3)] = item;
+  }
 }
 
 function mostrarMensagemBusca(texto){
