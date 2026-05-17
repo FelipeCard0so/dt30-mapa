@@ -64,6 +64,35 @@
     opacity:0;transition:opacity .18s ease;
   }
   #msg-busca-site.visivel,#msg-ant.visivel{opacity:1;}
+  #resultado-busca-global{
+    display:none;position:absolute;top:88px;right:330px;z-index:1002;
+    width:min(360px,calc(100vw - 24px));max-height:64vh;overflow:auto;
+    background:rgba(255,255,255,.98);border-radius:10px;
+    box-shadow:0 6px 24px rgba(0,0,0,.22);font-family:'Segoe UI',sans-serif;
+    padding:12px 14px;
+  }
+  #resultado-busca-global.visivel{display:block;}
+  .busca-global-topo{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;}
+  .busca-global-titulo{font-size:13px;font-weight:700;color:#1a237e;line-height:1.25;}
+  #fechar-busca-global{
+    width:26px;height:26px;border:none;border-radius:6px;background:#eef1f7;
+    color:#1a237e;font-weight:800;cursor:pointer;line-height:1;
+  }
+  #fechar-busca-global:hover{background:#dfe5f1;}
+  .busca-global-item{
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    border-top:1px solid #e6e8ef;padding:8px 0;font-size:12px;color:#333;
+  }
+  .busca-global-item:first-child{border-top:none;}
+  .busca-global-site{font-weight:700;color:#1a237e;}
+  .busca-global-ver{
+    border:none;border-radius:6px;background:#1a237e;color:white;
+    font-size:11px;font-weight:700;padding:6px 9px;cursor:pointer;white-space:nowrap;
+  }
+  .busca-global-ver:hover{background:#121858;}
+  @media (max-width: 768px){
+    #resultado-busca-global{right:52px;top:92px;width:calc(100vw - 68px);max-height:56vh;}
+  }
   .anteriores-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:8px;}
   .select-ant{width:100%;border:1px solid #cfd6e6;border-radius:6px;padding:8px 7px;font-size:12px;background:#fff;}
   .btn-ant{width:100%;padding:9px;margin-top:8px;font-size:12px;}
@@ -171,6 +200,13 @@
     <div id="msg-ant" aria-live="polite"></div>
   </div>
 </div>
+<div id="resultado-busca-global" aria-live="polite">
+  <div class="busca-global-topo">
+    <div class="busca-global-titulo" id="busca-global-titulo"></div>
+    <button id="fechar-busca-global" type="button" title="Fechar">X</button>
+  </div>
+  <div id="busca-global-lista"></div>
+</div>
 <script>
 var map = L.map("map").setView([-19.636789,-44.036828], 7);
 L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -188,6 +224,7 @@ var indiceSites = {};
 var buscaTimer = null;
 var modoAnterior = false;
 var mkHist = [];
+var ocorrenciasBuscaGlobal = [];
 
 function normalizarBuscaSite(valor){
   return String(valor || '').trim().toUpperCase().replace(/\s+/g, '').replace(/[^A-Z0-9]/g, '');
@@ -221,16 +258,88 @@ function garantirCamadaVisivel(item){
   if(item.listaCamada && !map.hasLayer(item.marker)) item.marker.addTo(map);
 }
 
+function procurarSiteHistorico(chave){
+  var achados = [];
+  Object.keys(ANTERIORES).sort().reverse().forEach(function(ano){
+    Object.keys(ANTERIORES[ano] || {})
+      .sort(function(a,b){return Number(b)-Number(a);})
+      .forEach(function(mes){
+        var pacote = ANTERIORES[ano][mes];
+        (pacote.pontos || []).forEach(function(p){
+          var siteChave = normalizarBuscaSite(p.id);
+          if(siteChave === chave || (siteChave.length >= 3 && siteChave.slice(-3) === chave)){
+            achados.push({ano:ano, mes:mes, label:pacote.label, ponto:p});
+          }
+        });
+      });
+  });
+  return achados;
+}
+
+function fecharBuscaGlobal(){
+  document.getElementById('resultado-busca-global').classList.remove('visivel');
+}
+
+function mostrarBuscaGlobal(chave, ocorrencias){
+  ocorrenciasBuscaGlobal = ocorrencias;
+  var box = document.getElementById('resultado-busca-global');
+  var titulo = document.getElementById('busca-global-titulo');
+  var lista = document.getElementById('busca-global-lista');
+  titulo.textContent = 'Site "' + document.getElementById('busca-site').value.toUpperCase() + '" encontrado em:';
+  lista.innerHTML = '';
+
+  ocorrencias.forEach(function(oc, idx){
+    var row = document.createElement('div');
+    row.className = 'busca-global-item';
+    var texto = document.createElement('div');
+    texto.innerHTML = '<span class="busca-global-site">Site "' + oc.ponto.id + '"</span> ' + oc.label;
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'busca-global-ver';
+    btn.textContent = 'ver';
+    btn.onclick = function(){abrirOcorrenciaBuscaGlobal(idx);};
+    row.appendChild(texto);
+    row.appendChild(btn);
+    lista.appendChild(row);
+  });
+
+  box.classList.add('visivel');
+}
+
+function abrirOcorrenciaBuscaGlobal(idx){
+  var oc = ocorrenciasBuscaGlobal[idx];
+  if(!oc) return;
+  document.getElementById('sel-ano-ant').value = oc.ano;
+  var ev = document.createEvent('HTMLEvents');
+  ev.initEvent('change', true, false);
+  document.getElementById('sel-ano-ant').dispatchEvent(ev);
+  document.getElementById('sel-mes-ant').value = oc.mes;
+  mostrarAba('anteriores');
+  mostrarMesAnterior(oc.ano, oc.mes, normalizarBuscaSite(oc.ponto.id));
+}
+
 function buscarSiteNoMapa(){
   var chave = normalizarBuscaSite(document.getElementById('busca-site').value);
   if(!chave){mostrarMensagemBusca(''); return;}
   var item = indiceSites[chave];
-  if(!item){mostrarMensagemBusca('Site não encontrado!'); return;}
-  mostrarMensagemBusca('');
-  garantirCamadaVisivel(item);
-  map.closePopup();
-  map.flyTo([item.lat, item.lon], Math.max(map.getZoom(), 13), {animate:true,duration:.85});
-  setTimeout(function(){item.marker.openPopup();}, 900);
+  var itemPodeAbrir = item && (item.listaCamada || map.hasLayer(item.marker));
+  if(itemPodeAbrir){
+    mostrarMensagemBusca('');
+    garantirCamadaVisivel(item);
+    map.closePopup();
+    map.flyTo([item.lat, item.lon], Math.max(map.getZoom(), 13), {animate:true,duration:.85});
+    setTimeout(function(){item.marker.openPopup();}, 900);
+    return;
+  }
+
+  var ocorrencias = procurarSiteHistorico(chave);
+  if(ocorrencias.length){
+    mostrarMensagemBusca('');
+    mostrarBuscaGlobal(chave, ocorrencias);
+    return;
+  }
+
+  mostrarMensagemBusca('Site não encontrado!');
 }
 
 function mkIcon(color, icon){
@@ -420,9 +529,9 @@ function popularMesesAnteriores(){
   preencherMeses();
 }
 
-function mostrarMesAnterior(){
-  var ano = document.getElementById('sel-ano-ant').value;
-  var mes = document.getElementById('sel-mes-ant').value;
+function mostrarMesAnterior(anoBusca, mesBusca, siteAbrir){
+  var ano = anoBusca || document.getElementById('sel-ano-ant').value;
+  var mes = mesBusca || document.getElementById('sel-mes-ant').value;
   var pacote = ANTERIORES[ano] && ANTERIORES[ano][mes];
   if(!pacote || !pacote.pontos || !pacote.pontos.length){
     mostrarMensagem('msg-ant', 'Nenhuma atividade encontrada nesse período.');
@@ -434,12 +543,16 @@ function mostrarMesAnterior(){
   setAtualVisivel(false);
   map.closePopup();
 
+  var markerParaAbrir = null;
   pacote.pontos.forEach(function(p){
     var d = dadosTipo(p);
     var mk = L.marker([p.lat,p.lon],{icon:d.icon}).addTo(map);
     mk.bindTooltip(d.label+p.id,{sticky:true,className:d.cls});
     mk.bindPopup(popupFixo(p, d.status));
     registrarSiteBusca(p.id, mk, p.lat, p.lon, null);
+    if(siteAbrir && normalizarBuscaSite(p.id) === siteAbrir && markerParaAbrir === null){
+      markerParaAbrir = {marker:mk, lat:p.lat, lon:p.lon};
+    }
     mkHist.push(mk);
   });
 
@@ -449,9 +562,14 @@ function mostrarMesAnterior(){
   mostrarMensagem('msg-ant', 'Carregado: ' + pacote.label + ' - ' + pacote.pontos.length + ' atividades.');
   if(mkHist.length){
     setTimeout(function(){
-      var grp = L.featureGroup(mkHist);
       map.invalidateSize();
-      map.fitBounds(grp.getBounds().pad(0.16));
+      if(markerParaAbrir){
+        map.flyTo([markerParaAbrir.lat, markerParaAbrir.lon], Math.max(map.getZoom(), 13), {animate:true,duration:.85});
+        setTimeout(function(){markerParaAbrir.marker.openPopup();}, 900);
+      } else {
+        var grp = L.featureGroup(mkHist);
+        map.fitBounds(grp.getBounds().pad(0.16));
+      }
     }, 80);
   }
 }
@@ -476,6 +594,7 @@ document.getElementById('tab-atual').addEventListener('click', voltarMapaAtual);
 document.getElementById('tab-anteriores').addEventListener('click', function(){mostrarAba('anteriores');});
 document.getElementById('btn-ant-ok').addEventListener('click', mostrarMesAnterior);
 document.getElementById('btn-voltar-atual').addEventListener('click', voltarMapaAtual);
+document.getElementById('fechar-busca-global').addEventListener('click', fecharBuscaGlobal);
 
 var painel = document.getElementById('painel');
 var togglePainel = document.getElementById('painel-toggle');
