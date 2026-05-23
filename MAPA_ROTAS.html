@@ -38,7 +38,7 @@ html,body,#map{width:100%;height:100%;margin:0;padding:0;font-family:'Segoe UI',
 /* ── Legenda ────────────────────────────────────── */
 .leg{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:12px;color:#333;}
 .dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex-shrink:0;}
-.dot-pend{background:#2A52BE;}
+.dot-pend{background:#00BFFF;box-shadow:0 0 5px rgba(0,191,255,0.6);}
 .dot-prox{background:#f39c12;border:2px solid #d68910;}
 .dot-conc{background:#27ae60;}
 .dot-impr{background:#e74c3c;}
@@ -310,7 +310,7 @@ html,body,#map{width:100%;height:100%;margin:0;padding:0;font-family:'Segoe UI',
     <label class="filtro"><input type="checkbox" id="chk-conc" checked onchange="toggleCamada('conc',this.checked)"/><span class="dot dot-conc"></span> Concluídas</label>
     <label class="filtro"><input type="checkbox" id="chk-impr" checked onchange="toggleCamada('impr',this.checked)"/><span class="dot dot-impr"></span> Improdutivas</label>
     <label class="filtro"><input type="checkbox" id="chk-canc" checked onchange="toggleCamada('canc',this.checked)"/><span class="dot dot-canc"></span> Canceladas</label>
-    <label class="filtro"><input type="checkbox" id="chk-hotel" checked onchange="toggleCamada('hotel',this.checked)"/><span class="dot dot-hotel"></span> Hotéis</label>
+    <label class="filtro"><input type="checkbox" id="chk-hotel" onchange="toggleCamada('hotel',this.checked)"/><span class="dot dot-hotel"></span> Hotéis</label>
     <label class="filtro"><input type="checkbox" id="chk-aguard" checked onchange="toggleCamada('aguard',this.checked)"/><span class="dot dot-aguard"></span> Aguardando</label>
     <label class="filtro"><input type="checkbox" id="chk-traffic" onchange="toggleTraffic(this.checked)"/><span style="width:12px;height:12px;display:inline-block;background:linear-gradient(90deg,#27ae60,#f39c12,#e74c3c);border-radius:3px;flex-shrink:0;"></span> Trânsito</label>
 
@@ -662,9 +662,9 @@ function desenharLinhaGuia(lat1, lon1, lat2, lon2, sourceId, cor, tracejada, lar
   var paint = {
     'line-color': cor,
     'line-width': largura,
-    'line-opacity': tracejada ? 0.45 : 0.75
+    'line-opacity': tracejada ? 0.75 : 0.85
   };
-  if (tracejada) paint['line-dasharray'] = [3, 3];
+  if (tracejada) paint['line-dasharray'] = [4, 3];
 
   map.addLayer({ id: 'layer-' + sourceId, type: 'line', source: sourceId, paint: paint });
 
@@ -683,7 +683,7 @@ function desenharLinhaGuia(lat1, lon1, lat2, lon2, sourceId, cor, tracejada, lar
     },
     paint: {
       'icon-color': cor,
-      'icon-opacity': tracejada ? 0.5 : 0.8
+      'icon-opacity': tracejada ? 0.8 : 0.9
     }
   });
 }
@@ -699,8 +699,8 @@ function desenharTodasLinhasGuia() {
     desenharLinhaGuia(
       de.lat, de.lon, para.lat, para.lon,
       'guia-' + i,
-      '#95a5a6',
-      true,   // tracejada
+      '#FF8C00',   // laranja forte — visível sobre qualquer fundo
+      true,        // tracejada
       2
     );
   }
@@ -723,7 +723,7 @@ function criarElProxima() {
 
 function criarElPendente(ordem) {
   var el = document.createElement('div');
-  el.style.cssText = 'width:20px;height:20px;border-radius:50%;background:#5d6d7e;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;font-weight:700;cursor:pointer;';
+  el.style.cssText = 'width:22px;height:22px;border-radius:50%;background:#00BFFF;border:2px solid #fff;box-shadow:0 0 8px rgba(0,191,255,0.7),0 2px 6px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:10px;color:white;font-weight:700;cursor:pointer;';
   el.textContent = String(ordem + 1);
   return el;
 }
@@ -898,6 +898,7 @@ map.on('load', function() {
   // ── Hotéis ────────────────────────────────────────────────
   HOTEIS.forEach(function(h) {
     var el = criarElHotel();
+    el.style.display = 'none';   // oculto por padrão — checkbox desmarcado
     var popup = new mapboxgl.Popup({offset:20}).setHTML(
       popupContent(h.nome,
         ['<b>Cidade:</b> ' + (h.cidade||'—'),
