@@ -568,7 +568,7 @@ html,body,#map{width:100%;height:100%;margin:0;padding:0;font-family:'Segoe UI',
 // MAPBOX_TOKEN é lido do arquivo local mapbox_token.js
 // (nunca publicado no GitHub — protegido pelo .gitignore)
 // ══════════════════════════════════════════════════════════════
-var PARTIDA       = {"lat": -23.436481139134557, "lon": -46.46403108059845, "cidade": "São Paulo"};
+var PARTIDA       = {"lat": -23.44587263079308, "lon": -46.45995417015226, "cidade": "São Paulo"};
 var ROTA          = [];
 var ROTA_REAL     = {"distancia": 0, "duracao": 0, "geometry": null};  // ← Pré-calculada no Python (1 chamada)
 var FIXOS         = [{"id": "MG-BMO", "cidade": "BRUMADINHO", "tec4g": "4G: 700/1800/2100/2600/2300/2300", "tec5g": "5G: 3500", "concluido": "SITE OK EM 02/07/2026...\r\nCOBERTURA DO SITE ESTAVA RUIM EM ALGUMAS TECNOLOGIAS DEVIDO A INTERFERENCIA VIZINHA E A TOPOGRAFIA DA REGIÃO.", "hotel": "PACHECO POUSADA 115 pila ", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -20.147442, "lon": -44.207139}, {"id": "MG-ZES", "cidade": "BELO HORIZONTE", "tec4g": "4G: 1800/2100/2600", "tec5g": "5G: 3500", "concluido": "SITE OK EM 03/07/26 ...\nNAO TEM 2100 ATIVO NESSE SITE - ROTA COMPROMETIDA DEVIDO A VARIOS PONTOS DE OBSTRUÇÃO E TOPOGRAFIA DO LOCAL, E A TORRE SER MAIS BAIXA DO LADO DO SETOR 1 E 3\r\n", "hotel": "", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -19.990705, "lon": -43.9896}, {"id": "MG-XDU", "cidade": "CONCEIÇÃO DO MATO DENTRO", "tec4g": "4G: 700", "tec5g": "", "concluido": "SITE OK EM03/07/26", "hotel": "CARAVELLE HOTEL 115 PILA", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -18.923426, "lon": -43.400301}, {"id": "MG-BQY", "cidade": "RIACHO DOS MACHADOS", "tec4g": "4G: 700", "tec5g": "", "concluido": "SITE OK EM 04/07/26", "hotel": "", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -16.17875, "lon": -43.174169}, {"id": "MG-SSG", "cidade": "SALINAS", "tec4g": "4G: 700/2100/2600", "tec5g": "5G: 3500", "concluido": "SITE OK EM 04/07/26", "hotel": "Hotel Volpi 120 pila ", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -16.167528, "lon": -42.293972}, {"id": "MG-JCO", "cidade": "JACINTO", "tec4g": "4G: 700", "tec5g": "", "concluido": "SITE OK EM 06/07/26", "hotel": "Pousada colibri 100 pila ", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -16.19577, "lon": -40.465968}, {"id": "BA-R6V", "cidade": "PORTO SEGURO", "tec4g": "4G: 700", "tec5g": "", "concluido": "SITE OK EM 06/07/26", "hotel": "Pousada Itajuipe Itabuna 125 PILA", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -16.376163, "lon": -39.244411}, {"id": "BA-AAT", "cidade": "ILHEUS", "tec4g": "", "tec5g": "5G: 3500", "concluido": "SITE OK EM 08/07/26...\nsite intermitente - dados estão ok - s1 e s2 ficaram bons s3 tive extrema dificuldade em fazer por conta da intermitência do site.", "hotel": "HOTEL KATRACA 120 pila ", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -14.85592, "lon": -39.0281}, {"id": "BA-JNM", "cidade": "JEQUIÉ", "tec4g": "4G: 700", "tec5g": "5G: 3500", "concluido": "SITE OK EM 08/07/26", "hotel": "Thanyu's Hotel 120 PILA", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -13.872236, "lon": -40.101839}, {"id": "MG-VYR", "cidade": "MIRAVÂNIA", "tec4g": "4G: 700", "tec5g": "", "concluido": "SIYE OK EM 10/07/26", "hotel": "HOTEL SÃO PEDRO 110 PILA", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -14.83743, "lon": -44.36823}, {"id": "MG-YHF", "cidade": "GUANHÃES", "tec4g": "4G: 700", "tec5g": "", "concluido": "SIYE OK EM 11/07/26", "hotel": "Hotel e Restaurante Lacerda 100 pila", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -19.011299, "lon": -42.823869}, {"id": "MG-CA1", "cidade": "IPATINGA", "tec4g": "4G: 1800/2100", "tec5g": "5G: 3500", "concluido": "13/07/2026 - foi feito a verificação aqui e os rádios foram trocados. O rádio que era para ser instalado no MGCA1 foi instalado no MGCA2 e vice-versa. O PMO vai fazer o acionamento para a correção", "hotel": ".", "status": "IMPRODUTIVO", "tipo": "improdutiva", "lat": -19.488465, "lon": -42.519014}, {"id": "MG-FRS", "cidade": "BOM JESUS DO AMPARO", "tec4g": "4G: 700", "tec5g": "", "concluido": "SITE OK EM 13/07/26", "hotel": "PACHECO POUSADA 115 pila ", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -19.72669, "lon": -43.429173}, {"id": "MG-HCZ", "cidade": "BELO HORIZONTE", "tec4g": "4G: 700/1800/2100", "tec5g": "5G: 3500", "concluido": "14/07/26  ...\nObservações:\n* Site apresentou degradação de desempenho durante os testes, com registros prévios de interferência reportados à equipe de suporte EOLEN.\n* Foi identificada forte interferência, principalmente em 4G 1800 MHz, proveniente de sites vizinhos, impactando o desempenho e o atingimento dos targets em alguns setores.\n* A topografia acentuada da região, com vias de elevada inclinação e difícil acesso, limitou a execução das coletas e influenciou a qualidade das medições.\n* No setor 1, a portadora 4G 2100 MHz apresentou dificuldade para atingir os targets, associada à elevada carga de usuários durante o período de testes.\n* A rota dinâmica em 5G apresentou baixa densidade de coleta, em decorrência das limitações de cobertura e das condições do ambiente já descritas.\n* O setor 2 atingiu os targets previstos, porém foi observada forte interferência proveniente da portadora 1900 MHz de site vizinho, impactando a qualidade do sinal durante as medições.\n* O setor 3 atingiu todos os targets previstos para as tecnologias testadas.\n* Não houve atuação da equipe de suporte durante a execução dos testes para mitigação das interferências ou apoio no processo de validação.", "hotel": "Hotel Chácara 110 pila", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -19.9255, "lon": -43.902106}, {"id": "MG-VKT", "cidade": "OURO PRETO", "tec4g": "4G: 700", "tec5g": "", "concluido": "SITE EM MINERADORA DA VALE", "hotel": ".", "status": "CANCELADO", "tipo": "cancelada", "lat": -20.232322, "lon": -43.577708}, {"id": "MG-ITA", "cidade": "ITABIRA", "tec4g": "4G: 700/1800/2100", "tec5g": "5G: 3500", "concluido": "SITE OK em 15/07/26 ...\nNão atingiu target nos setores 1 e 3  no 2100\nNão foi possível encontrar um lugar com SNR bom o suficiente. Porém o setor 2 foi o que estava com o pior sinal e bateu a target! \n\n@⁨Filipe Bonfim NgSolution⁩ - Autorizou no grupo a prosseguir. \n\n> S3 - 2100 ❌ \nDownlink = 15Mb\nSNR = 12\nRSRP = -75\n> ———————————\n> S1 - 2100 ❌ \nDownlink = 39,7Mb\nSNR = 6\nRSRP = -76\n> ———————————\n> S2 - 2100 ✅\nDownlink = 45Mb\nSNR = 4\nRSRP = -82", "hotel": "Pousada Santa Efigenia ll 100 pila", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -19.634033, "lon": -43.220864}, {"id": "MG-SGM", "cidade": "SÃO GONÇALO DO RIO ABAIXO", "tec4g": "4G: 700/1800/2100/2600", "tec5g": "5G: 3500", "concluido": "15/07/26 - ...\nSITE 4G OK E FINALIZADO\r\n\tSITE 5G INVERTIDO E NADA FOI FEITO APENAS ROTA DE VERIFICAÇÃO GRAVADA", "hotel": "", "status": "IMPRODUTIVO", "tipo": "improdutiva", "lat": -19.8272, "lon": -43.3658}, {"id": "MG-VFL", "cidade": "VIÇOSA", "tec4g": "ROTA 5G APENAS", "tec5g": "5G: 3500", "concluido": "SITE OK 16/07/26 ⚠️ ...\nsite invertido 3 com 2, apenas no 5G ROTA MAIOR PARA EVIDENCIA.\n4G: SITE OK finalizado estático e rota", "hotel": "Hotel LP 80 PILA", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -20.729556, "lon": -42.880081}, {"id": "MG-SHF", "cidade": "CATAGUASES", "tec4g": "4G: 700/2600", "tec5g": "5G: 3500", "concluido": "SITE OK 16/07/26 ", "hotel": "", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -21.385003, "lon": -42.716939}, {"id": "MG-XUA", "cidade": "MAR DE ESPANHA", "tec4g": "4G: 700", "tec5g": "", "concluido": "SITE OK EM 17/07/26", "hotel": "Hotel Ed1000.son 110 pila ", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -21.931181, "lon": -43.060519}, {"id": "MG-EMQ", "cidade": "SANTOS DUMONT", "tec4g": "4G: 700", "tec5g": "", "concluido": "SITE OK EM 17/07/26", "hotel": "BASE", "status": "✓ Atividade concluída", "tipo": "concluida", "lat": -21.3624, "lon": -43.577}];
@@ -1724,7 +1724,7 @@ if (lerUso() >= LIMITE_QUOTA) {
       <div class="dash-tab-panel" id="dtab-comparativo">
         <div class="dash-comp-grid" id="dash-comp"></div>
         <div class="relatorio-box">
-          <p>Consulte os dados da planilha CONTROLE DIÁRIO DE ATIVIDADES - 2025.</p>
+          <p>Consulte os dados da planilha CONTROLE DIÁRIO DE ATIVIDADES.</p>
           <button class="btn-relatorio" onclick="abrirModalRelatorio()">📄 Solicitar relatório PDF</button>
         </div>
       </div>
@@ -1964,8 +1964,9 @@ function _desenharCabecalhoPDF(doc, y, titulo, x, largura) {
   doc.setDrawColor(20, 20, 20);
   doc.setLineWidth(.25);
   doc.setFillColor(255, 255, 255); doc.rect(x, y, largura, 10, 'FD');
-  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.text('CONTROLE DIÁRIO DE ATIVIDADES', 148.5, y + 6.5, {align:'center'});
-  doc.setFontSize(8); doc.text(titulo, 148.5, y + 9, {align:'center'});
+  var centro = x + largura / 2;
+  doc.setFont('helvetica', 'bold'); doc.setFontSize(13); doc.text('CONTROLE DIÁRIO DE ATIVIDADES', centro, y + 6.5, {align:'center'});
+  doc.setFontSize(8); doc.text(titulo, centro, y + 9, {align:'center'});
   doc.setFontSize(7); doc.text('TEC. FELIPE CARDOSO', x + largura - 2, y + 4.5, {align:'right'});
   doc.text('METRO TELWORKS', x + largura - 2, y + 8, {align:'right'});
 }
@@ -2011,10 +2012,30 @@ function _gerarPdfVisual(jsPDF, itens, inicio, fim, resumo, docExistente) {
   });
 
   if (y + 12 > 286) y = 270;
+  var totalDeslocamento = resumo.total_deslocamento || '';
+  var totalHora = resumo.total_hora || '';
+  if (!totalDeslocamento) {
+    var kmFallback = itens.reduce(function(total, item) { return total + Number(item.deslocamento || 0); }, 0);
+    totalDeslocamento = kmFallback ? kmFallback.toLocaleString('pt-BR', {minimumFractionDigits: 0, maximumFractionDigits: 0}) : '';
+  }
+  if (!totalHora) {
+    var segundos = itens.reduce(function(total, item) {
+      var texto = String(item.hora_trabalhada || '').replace(/[^0-9:]/g, '');
+      var partes = texto.split(':');
+      if (partes.length < 2) return total;
+      return total + Number(partes[0]) * 3600 + Number(partes[1]) * 60 + Number(partes[2] || 0);
+    }, 0);
+    if (segundos) {
+      var horas = Math.floor(segundos / 3600);
+      var minutos = Math.floor((segundos % 3600) / 60);
+      var segundosRestantes = segundos % 60;
+      totalHora = String(horas).padStart(2, '0') + ':' + String(minutos).padStart(2, '0') + ':' + String(segundosRestantes).padStart(2, '0');
+    }
+  }
   doc.setFillColor(0, 0, 0); doc.rect(x, y, largura, 8, 'F');
   doc.setTextColor(255, 255, 255); doc.setFont('helvetica', 'bold'); doc.setFontSize(8);
-  doc.text(String(resumo.total_deslocamento || ''), x + 111 + 10.5, y + 5, {align:'center'});
-  doc.text(String(resumo.total_hora || ''), x + 132 + 11, y + 5, {align:'center'});
+  doc.text(String(totalDeslocamento), x + 111 + 10.5, y + 5, {align:'center'});
+  doc.text(String(totalHora), x + 132 + 11, y + 5, {align:'center'});
   doc.setTextColor(0, 0, 0); y += 8;
   doc.setFillColor(244, 177, 131); doc.rect(x, y, largura, 7, 'F');
   doc.setFontSize(7); doc.text('OBSERVAÇÕES :', x + 1, y + 4.5);
