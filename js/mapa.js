@@ -388,11 +388,18 @@ function criarElAguard() {
   return el;
 }
 
-function popupContent(titulo, linhas, statusHtml, btnHtml) {
+function btnGoogleMaps(lat, lon) {
+  if (lat === undefined || lon === undefined || lat === null || lon === null) return '';
+  var url = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(lat + ',' + lon);
+  return '<a class="btn-google-maps" href="' + url + '" target="_blank" rel="noopener">↗ Ver no Google Maps</a>';
+}
+
+function popupContent(titulo, linhas, statusHtml, btnHtml, lat, lon) {
   var html = '<div class="popup-dt"><b>' + titulo + '</b>';
   linhas.forEach(function(l){ if(l) html += '<br>' + l; });
   if(statusHtml) html += statusHtml;
   if(btnHtml) html += btnHtml;
+  html += btnGoogleMaps(lat, lon);
   html += '</div>';
   return html;
 }
@@ -437,7 +444,7 @@ map.on('load', function() {
     .setLngLat([PARTIDA.lon, PARTIDA.lat])
     .setPopup(new mapboxgl.Popup({offset:20}).setHTML(
       popupContent('🚩 Ponto de Partida',
-        ['<b>Cidade:</b> ' + PARTIDA.cidade], null, null)
+        ['<b>Cidade:</b> ' + PARTIDA.cidade], null, null, PARTIDA.lat, PARTIDA.lon)
     ))
     .addTo(map);
 
@@ -456,7 +463,7 @@ map.on('load', function() {
            p.indoor ? '<b style="color:#b91c1c;">⚠️ SITE INDOOR</b>' : '',
            p.hotel ? '<b>Hotel:</b> ' + p.hotel : ''],
           '<div class="popup-status" style="background:#dbeafe;color:#1e40af;">🎯 Próxima atividade</div>',
-          null
+          null, p.lat, p.lon
         )
       );
     } else {
@@ -471,7 +478,7 @@ map.on('load', function() {
            p.indoor ? '<b style="color:#b91c1c;">⚠️ SITE INDOOR</b>' : '',
            p.hotel ? '<b>Hotel:</b> ' + p.hotel : ''],
           '<div class="popup-status" style="background:#f5f5f5;color:#555;">🕐 Standby (' + (i+1) + 'ª na fila)</div>',
-          btnHtml
+          btnHtml, p.lat, p.lon
         )
       );
     }
@@ -502,7 +509,7 @@ map.on('load', function() {
          freqStr(p) ? '<b>Freq:</b> ' + freqStr(p) : '',
          p.concluido ? '<b>Obs:</b> ' + p.concluido : '',
          p.hotel ? '<b>Hotel:</b> ' + p.hotel : ''],
-        statusHtml, null)
+        statusHtml, null, p.lat, p.lon)
     );
     var mk = new mapboxgl.Marker({element:el, anchor:'center'})
       .setLngLat([p.lon, p.lat])
@@ -530,7 +537,7 @@ map.on('load', function() {
          freqStr(p) ? '<b>Freq:</b> ' + freqStr(p) : '',
          p.concluido ? '<b>Motivo:</b> ' + p.concluido : '',
          (p.hotel && p.hotel !== '.') ? '<b>Hotel:</b> ' + p.hotel : ''],
-        '<div class="popup-status ps-aguard">⏳ Aguardando para deslocar</div>', null)
+        '<div class="popup-status ps-aguard">⏳ Aguardando para deslocar</div>', null, p.lat, p.lon)
     );
     var mk = new mapboxgl.Marker({element:el, anchor:'center'})
       .setLngLat([p.lon, p.lat])
@@ -587,7 +594,7 @@ map.on('load', function() {
          h.tel      ? '<b>Tel:</b> '      + h.tel    : '',
          valorStr   ? '<b>Valor:</b> R$ ' + valorStr : '',
          observacaoStr ? '<b>Observação:</b> ' + observacaoStr : ''],
-        popupExtra, null)
+        popupExtra, null, h.lat, h.lon)
     );
 
     var mk = new mapboxgl.Marker({element:el, anchor:'center'})
@@ -1048,7 +1055,7 @@ function mostrarMesAnterior(anoBusca, mesBusca, siteAbrir) {
           ['<b>Cidade:</b> ' + p.cidade,
            p.tec4g ? '<b>Freq:</b> ' + [p.tec4g,p.tec5g].filter(Boolean).join(' | ') : '',
            p.concluido ? '<b>Obs:</b> ' + p.concluido : ''],
-          statusHtml, null)
+          statusHtml, null, p.lat, p.lon)
       ))
       .addTo(map);
     if (siteAbrir && normBusca(p.id) === siteAbrir && !mkAbrir) {
